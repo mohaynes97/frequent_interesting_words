@@ -2,7 +2,11 @@
 # 2. aggregate and format int
 # 3. export in the output format
 
+# we need to get the 
+
 from collections import defaultdict
+from pathlib import Path
+from tokenize import String
 from typing import List
 import yake
 import nltk
@@ -47,11 +51,12 @@ def extract_words_with_frequency_from_file(filepath: str):
 
 
 def aggregate_words_with_frequency(filepaths: List[str]):
-    result = defaultdict(int)
+    filepaths = list(set(filepaths))
+    result = defaultdict(dict)
     for file in filepaths:
         word_with_frequency_dict = extract_words_with_frequency_from_file(file)
         for word, frequency in word_with_frequency_dict.items():
-            result[word] += frequency
+            result[word][Path(file).name[:-4]] = frequency
     return result
 
 
