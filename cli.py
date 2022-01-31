@@ -1,0 +1,43 @@
+# 1. fetch x top keywords from each document, with frequency
+# 2. aggregate and format int
+# 3. export in the output format
+
+from typing import List
+import yake
+import nltk 
+
+
+def extract_keywords(text: str):
+    """
+    Get up to the top 10 keywords from text 
+    
+    """
+    kw_extractor = yake.KeywordExtractor(lan="en", n=1, dedupLim=0.9, top=10, features=None)
+    keywords = kw_extractor.extract_keywords(text)
+
+    return [k[0].lower() for k in sorted(keywords, key=lambda x: x[1])]
+
+
+def build_word_occurance_dict(text: str, words: List[str]):
+    """
+    Build a dictionary of the frequency of words contained within a body of text
+    """
+    all_words = nltk.tokenize.TweetTokenizer(text).tokenize(text)
+    stopwords = nltk.corpus.stopwords.words('english')
+    lower_case_words = [k.lower() for k in words]
+    filtered_words = nltk.FreqDist(w.lower() for w in all_words if w not in stopwords and w.lower() in lower_case_words)  
+
+    return filtered_words
+
+
+def extract_words_with_frequecy_from_file(filepath: str):
+    """
+    Extract a list of the 10 most interesting words with frequency from a given document
+
+    XXX: 10 limit not tested
+    """
+    with open(filepath, "r") as f:
+        text = f.read()
+
+    keywords = extract_keywords(text)
+    return build_word_occurance_dict(text, keywords)
