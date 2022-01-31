@@ -41,3 +41,9 @@ def extract_words_with_frequecy_from_file(filepath: str):
 
     keywords = extract_keywords(text)
     return build_word_occurance_dict(text, keywords)
+
+
+def aggregate_words_with_frequency(filepaths: List[str]):
+    if not filepaths:
+        return {}
+    return extract_words_with_frequecy_from_file(filepaths[0])
