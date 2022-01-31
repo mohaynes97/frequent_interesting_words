@@ -5,7 +5,9 @@
 from collections import defaultdict
 from typing import List
 import yake
-import nltk 
+import nltk
+import click
+import os
 
 
 def extract_keywords(text: str):
@@ -13,7 +15,7 @@ def extract_keywords(text: str):
     Get up to the top 10 keywords from text 
     
     """
-    kw_extractor = yake.KeywordExtractor(lan="en", n=1, dedupLim=0.9, top=10, features=None)
+    kw_extractor = yake.KeywordExtractor(lan="en", n=1, dedupLim=0.9, top=50, features=None)
     keywords = kw_extractor.extract_keywords(text)
 
     return [k[0].lower() for k in sorted(keywords, key=lambda x: x[1])]
@@ -31,7 +33,7 @@ def build_word_occurance_dict(text: str, words: List[str]) :
     return filtered_words
 
 
-def extract_words_with_frequecy_from_file(filepath: str):
+def extract_words_with_frequency_from_file(filepath: str):
     """
     Extract a list of the 10 most interesting words with frequency from a given document
 
@@ -47,7 +49,17 @@ def extract_words_with_frequecy_from_file(filepath: str):
 def aggregate_words_with_frequency(filepaths: List[str]):
     result = defaultdict(int)
     for file in filepaths:
-        word_with_frequency_dict = extract_words_with_frequecy_from_file(file)
+        word_with_frequency_dict = extract_words_with_frequency_from_file(file)
         for word, frequency in word_with_frequency_dict.items():
             result[word] += frequency
     return result
+
+
+@click.command()
+@click.argument("path", type=click.Path("r"))
+def frequent_interesting_words(path):
+    aggregate_words_with_frequency([path])
+
+
+if __name__ == '__main__':
+    frequent_interesting_words()

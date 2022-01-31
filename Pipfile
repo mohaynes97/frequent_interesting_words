@@ -8,6 +8,7 @@ yake = "*"
 pytest = "*"
 pytest-mock = "*"
 nltk = "*"
+click = "*"
 
 [dev-packages]
 
