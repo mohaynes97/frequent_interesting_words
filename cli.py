@@ -58,7 +58,16 @@ def aggregate_words_with_frequency(filepaths: List[str]):
 @click.command()
 @click.argument("path", type=click.Path("r"))
 def frequent_interesting_words(path):
-    aggregate_words_with_frequency([path])
+    if os.path.isdir(path): 
+        directory_contents = os.listdir(path)
+        files_to_process = []
+        for file in directory_contents:
+            filename = os.path.join(path, file)
+            if os.path.isfile(filename):
+                files_to_process.append(filename)
+        aggregate_words_with_frequency(files_to_process)         
+    else:
+        aggregate_words_with_frequency([path])
 
 
 if __name__ == '__main__':
