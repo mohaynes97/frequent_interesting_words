@@ -2,6 +2,7 @@
 # 2. aggregate and format int
 # 3. export in the output format
 
+from collections import defaultdict
 from typing import List
 import yake
 import nltk 
@@ -18,7 +19,7 @@ def extract_keywords(text: str):
     return [k[0].lower() for k in sorted(keywords, key=lambda x: x[1])]
 
 
-def build_word_occurance_dict(text: str, words: List[str]):
+def build_word_occurance_dict(text: str, words: List[str]) :
     """
     Build a dictionary of the frequency of words contained within a body of text
     """
@@ -44,6 +45,9 @@ def extract_words_with_frequecy_from_file(filepath: str):
 
 
 def aggregate_words_with_frequency(filepaths: List[str]):
-    if not filepaths:
-        return {}
-    return extract_words_with_frequecy_from_file(filepaths[0])
+    result = defaultdict(int)
+    for file in filepaths:
+        word_with_frequency_dict = extract_words_with_frequecy_from_file(file)
+        for word, frequency in word_with_frequency_dict.items():
+            result[word] += frequency
+    return result
