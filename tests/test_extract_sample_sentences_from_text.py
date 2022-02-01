@@ -21,3 +21,8 @@ def test_extract_multiple_sentences_mixed_case():
 
 def test_extract_multiple_sentences_awkward_text_usage():
     assert extract_sample_sentences_from_text("cat", "Cat on mat. cat hates mat..., what!") == ["Cat on mat.", "cat hates mat..., what!"]
+
+
+def test_extract_word_no_substrings():
+    assert extract_sample_sentences_from_text("cat", "Catherine loves mats. Cat loves mats.") == ["Cat loves mats."]
+

@@ -66,7 +66,7 @@ def extract_sample_sentences_from_text(keyword: str, text: str):
         return []
 
     sentences = nltk.tokenize.sent_tokenize(text)
-    return [sentence for sentence in sentences if keyword.lower() in sentence.lower()]
+    return [sentence for sentence in sentences if keyword.lower() in nltk.tokenize.word_tokenize(sentence.lower())]
  
 
 def format_output_table(words_with_frequency, word_to_sentences_map):
@@ -138,7 +138,7 @@ def frequent_interesting_words(path):
         for word in paths_to_word_map[filepath]:
             words[word] += extract_sample_sentences_from_text(word, text)
     
-    # format_output_table(result, words).dump("welp.md")
+    format_output_table(result, words).dump("welp.md")
 
 
 if __name__ == '__main__':
