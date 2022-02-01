@@ -82,7 +82,7 @@ def format_output_table(words_with_frequency):
 
     rows = []
     for word, frequency in flattened_words:
-        rows.append([f"{word} ({frequency})", ", ".join(words_with_frequency[word].keys())])
+        rows.append([f"{word} ({frequency})", ", ".join(sorted(words_with_frequency[word]))])
 
     writer = MarkdownTableWriter(
         table_name="Interesting Words Summary",
@@ -108,6 +108,8 @@ def frequent_interesting_words(path):
         result = aggregate_words_with_frequency([path])
     
     click.echo([k for k, _ in flatten_and_sort_words_with_frequency(result)])
+    writer = format_output_table(result)
+    writer.dump('result.md')
 
 
 if __name__ == '__main__':

@@ -18,10 +18,10 @@ def test_generate_table_inner_empty_parameters():
 def test_generate_table_one_doc():
     writer = format_output_table({'word': {'doc': 1} })
     with open(f"{ROOT_DIR}/fixtures/test_generate_table_one_doc.md") as f:
-        writer.dumps() == f.read()
+        assert writer.dumps() == str(f.read())
 
 
 def test_generate_table_multiple_docs():
-    writer = format_output_table({'word': {'doc1': 3, 'doc2': 1}, 'word2': {'doc1': 1 } })
+    writer = format_output_table({'word': {'doc2': 3, 'doc1': 1}, 'word2': {'doc1': 1 } })
     with open(f"{ROOT_DIR}/fixtures/test_generate_table_multiple_docs.md") as f:
-        writer.dumps() == f.read()
+        assert writer.dumps() == f.read()
