@@ -53,6 +53,7 @@ def aggregate_words_with_frequency(filepaths: List[str]):
             result[word][Path(file).name[:-4]] = frequency
     return result
 
+
 def flatten_and_sort_words_with_frequency(words_with_frequency):
     flattened_words = [(k, sum(frequency for _, frequency in v.items() )) for k, v in words_with_frequency.items()]
     
@@ -108,8 +109,6 @@ def frequent_interesting_words(path):
         result = aggregate_words_with_frequency([path])
     
     click.echo([k for k, _ in flatten_and_sort_words_with_frequency(result)])
-    writer = format_output_table(result)
-    writer.dump('result.md')
 
 
 if __name__ == '__main__':
