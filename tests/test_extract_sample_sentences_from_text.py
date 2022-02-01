@@ -17,3 +17,7 @@ def test_extract_multiple_sentences():
 
 def test_extract_multiple_sentences_mixed_case():
     assert extract_sample_sentences_from_text("cat", "Cat on mat. cat loves mat.") == ["Cat on mat.", "cat loves mat."]
+
+
+def test_extract_multiple_sentences_awkward_text_usage():
+    assert extract_sample_sentences_from_text("cat", "Cat on mat. cat hates mat..., what!") == ["Cat on mat.", "cat hates mat..., what!"]

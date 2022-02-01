@@ -58,9 +58,7 @@ def aggregate_words_with_frequency(filepaths: List[str]):
 def extract_sample_sentences_from_text(keyword: str, text: str):
     """
     pulls a number of sample sentences from the text based on the keyword
-    
-    returns as close to count as it can
-    
+        
     """
     if not keyword or not text: 
         return []
