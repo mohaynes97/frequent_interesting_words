@@ -59,7 +59,7 @@ def extract_sample_sentences_from_text(keyword: str, text: str, count: int = 1):
     """
     pulls a number of sample sentences from the text based on the keyword
     """
-    return ""
+    return []
 
 
 @click.command()
