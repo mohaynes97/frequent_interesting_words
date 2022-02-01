@@ -13,5 +13,5 @@ def test_text():
     assert list(data.keys()) == ["cat", "sat", "mat"]
     for word, v in data.items():
         for file, frequency in v.items():
-            assert file == "cats_and_mats"
+            assert file == "/test/cats_and_mats.txt"
             assert frequency == 2 if word == "cat" else frequency == 1
