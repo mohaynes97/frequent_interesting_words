@@ -15,9 +15,11 @@ def test_frequent_interesting_words_file():
   runner = CliRunner()
   result = runner.invoke(frequent_interesting_words, [f"{ROOT_DIR}/fixtures/cats_and_mats.txt"])
   assert result.exit_code == 0
-
+  assert result.output == "['cat', 'mat', 'sat']\n"
   
+
 def test_frequent_interesting_words_directory():
   runner = CliRunner()
   result = runner.invoke(frequent_interesting_words, [f"{ROOT_DIR}/fixtures/path_directory"])
   assert result.exit_code == 0
+  assert result.output == "['cat', 'dog', 'bone', 'mat']\n"

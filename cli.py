@@ -1,9 +1,3 @@
-# 1. fetch x top keywords from each document, with frequency
-# 2. aggregate and format int
-# 3. export in the output format
-
-# we need to get the 
-
 from collections import defaultdict
 from pathlib import Path
 from tokenize import String
@@ -56,6 +50,7 @@ def aggregate_words_with_frequency(filepaths: List[str]):
     for file in filepaths:
         word_with_frequency_dict = extract_words_with_frequency_from_file(file)
         for word, frequency in word_with_frequency_dict.items():
+            # remove the .txt from the file path
             result[word][Path(file).name[:-4]] = frequency
     return result
 
@@ -70,10 +65,17 @@ def frequent_interesting_words(path):
             filename = os.path.join(path, file)
             if os.path.isfile(filename):
                 files_to_process.append(filename)
-        aggregate_words_with_frequency(files_to_process)         
+        result = aggregate_words_with_frequency(files_to_process)         
     else:
-        aggregate_words_with_frequency([path])
+        result = aggregate_words_with_frequency([path])
 
+    # flatten the format to a list of tuples
+    flattened_words = [(k, sum(frequency for _, frequency in v.items() )) for k, v in result.items()]
+    
+    # turn to list ordered by size, followed by alphabetical
+    flattened_words = [k for k, _ in sorted(flattened_words, key=lambda x: (-x[1], x[0]))]
+    
+    click.echo(flattened_words)
 
 if __name__ == '__main__':
     frequent_interesting_words()
