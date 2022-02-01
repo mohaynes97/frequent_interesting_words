@@ -111,7 +111,8 @@ def build_filepaths_to_process(path: str):
 
 @click.command()
 @click.argument("path", type=click.Path("r"))
-def frequent_interesting_words(path):
+@click.option('--target', default="output.md", type=str)
+def frequent_interesting_words(path, target):
     filepaths_to_process = build_filepaths_to_process(path)
    
     interesting_word_frequency_collection = []
@@ -138,7 +139,7 @@ def frequent_interesting_words(path):
         for word in paths_to_word_map[filepath]:
             words[word] += extract_sample_sentences_from_text(word, text)
     
-    format_output_table(result, words).dump("welp.md")
+    format_output_table(result, words).dump(target)
 
 
 if __name__ == '__main__':
