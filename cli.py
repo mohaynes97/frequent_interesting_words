@@ -10,7 +10,7 @@ import os
 
 def extract_keywords(text: str):
     """
-    Get up to the top 10 keywords from text 
+    Get up to the top x keywords from text 
     
     """
     kw_extractor = yake.KeywordExtractor(lan="en", n=1, dedupLim=0.9, top=50, features=None)
@@ -53,6 +53,13 @@ def aggregate_words_with_frequency(filepaths: List[str]):
             # remove the .txt from the file path
             result[word][Path(file).name[:-4]] = frequency
     return result
+
+
+def extract_sample_sentences_from_text(keyword: str, text: str, count: int = 1):
+    """
+    pulls a number of sample sentences from the text based on the keyword
+    """
+    return ""
 
 
 @click.command()
