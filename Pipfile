@@ -9,6 +9,7 @@ pytest = "*"
 pytest-mock = "*"
 nltk = "*"
 click = "*"
+pytablewriter = "*"
 
 [dev-packages]
 

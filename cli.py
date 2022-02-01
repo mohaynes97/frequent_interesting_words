@@ -1,7 +1,8 @@
 from collections import defaultdict
 from pathlib import Path
-from tokenize import String
 from typing import List
+from pytablewriter import MarkdownTableWriter
+
 import yake
 import nltk
 import click
@@ -33,9 +34,7 @@ def build_word_occurance_dict(text: str, words: List[str]) :
 
 def extract_words_with_frequency_from_file(filepath: str):
     """
-    Extract a list of the 10 most interesting words with frequency from a given document
-
-    XXX: 10 limit not tested
+    Extract a list of the most interesting words with frequency from a given document
     """
     with open(filepath, "r") as f:
         text = f.read()
@@ -54,11 +53,16 @@ def aggregate_words_with_frequency(filepaths: List[str]):
             result[word][Path(file).name[:-4]] = frequency
     return result
 
+def flatten_and_sort_words_with_frequency(words_with_frequency):
+    flattened_words = [(k, sum(frequency for _, frequency in v.items() )) for k, v in words_with_frequency.items()]
+    
+    # ordered by frequency, followed by alphabetical
+    return sorted(flattened_words, key=lambda x: (-x[1], x[0]))    
+
 
 def extract_sample_sentences_from_text(keyword: str, text: str):
     """
     pulls a number of sample sentences from the text based on the keyword
-        
     """
     if not keyword or not text: 
         return []
@@ -66,6 +70,28 @@ def extract_sample_sentences_from_text(keyword: str, text: str):
     sentences = nltk.tokenize.sent_tokenize(text)
     return [sentence for sentence in sentences if keyword.lower() in sentence.lower()]
  
+
+def format_output_table(words_with_frequency):
+    """
+    Create the correct table writer    
+    """
+    if not words_with_frequency or not all(v for v in words_with_frequency.values()):
+        raise ValueError("Invalid Parameter")
+
+    flattened_words = flatten_and_sort_words_with_frequency(words_with_frequency)
+
+    rows = []
+    for word, frequency in flattened_words:
+        rows.append([f"{word} ({frequency})", ", ".join(words_with_frequency[word].keys())])
+
+    writer = MarkdownTableWriter(
+        table_name="Interesting Words Summary",
+        headers=["Word (Total Occurances)", "Documents"],
+        value_matrix=rows
+    )
+
+    return writer
+
 
 @click.command()
 @click.argument("path", type=click.Path("r"))
@@ -80,14 +106,9 @@ def frequent_interesting_words(path):
         result = aggregate_words_with_frequency(files_to_process)         
     else:
         result = aggregate_words_with_frequency([path])
+    
+    click.echo([k for k, _ in flatten_and_sort_words_with_frequency(result)])
 
-    # flatten the format to a list of tuples
-    flattened_words = [(k, sum(frequency for _, frequency in v.items() )) for k, v in result.items()]
-    
-    # turn to list ordered by size, followed by alphabetical
-    flattened_words = [k for k, _ in sorted(flattened_words, key=lambda x: (-x[1], x[0]))]
-    
-    click.echo(flattened_words)
 
 if __name__ == '__main__':
     frequent_interesting_words()
