@@ -32,25 +32,23 @@ def build_word_occurance_dict(text: str, words: List[str]) :
     return filtered_words
 
 
-def extract_words_with_frequency_from_file(filepath: str):
-    """
-    Extract a list of the most interesting words with frequency from a given document
-    """
-    with open(filepath, "r") as f:
-        text = f.read()
+def build_interesting_word_frequency_dict(text: str, path: str):
+    if not path or not text:
+        return {}
 
-    keywords = extract_keywords(text)
-    return build_word_occurance_dict(text, keywords)
+    return {
+        word: { Path(path).name[:-4]: frequency }
+        for word, frequency in build_word_occurance_dict(text, extract_keywords(text)).items()
+    }
 
 
-def aggregate_words_with_frequency(filepaths: List[str]):
-    filepaths = list(set(filepaths))
+def aggregate_words_with_frequency(interesting_word_frequency_collection):
+    """merge the dicts"""
     result = defaultdict(dict)
-    for file in filepaths:
-        word_with_frequency_dict = extract_words_with_frequency_from_file(file)
-        for word, frequency in word_with_frequency_dict.items():
-            # remove the .txt from the file path
-            result[word][Path(file).name[:-4]] = frequency
+    for interesting_word_frequency_dict in interesting_word_frequency_collection:
+        for word, v in interesting_word_frequency_dict.items():
+            for document, frequency in v.items():
+                result[word][document] = frequency
     return result
 
 
@@ -97,17 +95,24 @@ def format_output_table(words_with_frequency):
 @click.command()
 @click.argument("path", type=click.Path("r"))
 def frequent_interesting_words(path):
+    filepaths_to_process = []
     if os.path.isdir(path): 
         directory_contents = os.listdir(path)
-        files_to_process = []
+        filepaths_to_process = []
         for file in directory_contents:
             filename = os.path.join(path, file)
             if os.path.isfile(filename):
-                files_to_process.append(filename)
-        result = aggregate_words_with_frequency(files_to_process)         
+                filepaths_to_process.append(filename)
     else:
-        result = aggregate_words_with_frequency([path])
-    
+        filepaths_to_process.append(path)
+
+    interesting_word_frequency_collection = []
+    for path in filepaths_to_process:        
+        with open(path, "r") as f:
+            text = f.read()
+        interesting_word_frequency_collection.append(build_interesting_word_frequency_dict(text, path))
+
+    result = aggregate_words_with_frequency(interesting_word_frequency_collection)
     click.echo([k for k, _ in flatten_and_sort_words_with_frequency(result)])
 
 
