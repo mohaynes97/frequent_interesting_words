@@ -81,7 +81,7 @@ def format_output_table(words_with_frequency, word_to_sentences_map):
     rows = []
     for word, frequency in flattened_words:
         rows.append([
-            f"{word} ({frequency})", ", ".join(sorted(words_with_frequency[word])),
+            f"{word} ({frequency})", ", ".join(sorted(Path(path).name[:-4] for path in words_with_frequency[word])),
             "<br/><br/>".join(word_to_sentences_map[word])
         ])
 
