@@ -55,18 +55,19 @@ def aggregate_words_with_frequency(filepaths: List[str]):
     return result
 
 
-def extract_sample_sentences_from_text(keyword: str, text: str, count: int = 1):
+def extract_sample_sentences_from_text(keyword: str, text: str):
     """
     pulls a number of sample sentences from the text based on the keyword
+    
+    returns as close to count as it can
+    
     """
     if not keyword or not text: 
         return []
 
     sentences = nltk.tokenize.sent_tokenize(text)
-    for sentence in sentences:
-        if keyword in sentence:
-            return [sentence]
-
+    return [sentence for sentence in sentences if keyword.lower() in sentence.lower()]
+ 
 
 @click.command()
 @click.argument("path", type=click.Path("r"))
