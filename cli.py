@@ -59,7 +59,13 @@ def extract_sample_sentences_from_text(keyword: str, text: str, count: int = 1):
     """
     pulls a number of sample sentences from the text based on the keyword
     """
-    return []
+    if not keyword or not text: 
+        return []
+
+    sentences = nltk.tokenize.sent_tokenize(text)
+    for sentence in sentences:
+        if keyword in sentence:
+            return [sentence]
 
 
 @click.command()
