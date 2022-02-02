@@ -59,7 +59,7 @@ def flatten_and_sort_words_with_frequency(words_with_frequency):
     return sorted(flattened_words, key=lambda x: (-x[1], x[0]))    
 
 
-def extract_sample_sentences_from_text(keyword: str, text: str):
+def extract_sample_sentences_from_text(keyword: str, text: str, limit: int=None):
     """
     pulls a number of sample sentences from the text based on the keyword
     """
@@ -67,8 +67,10 @@ def extract_sample_sentences_from_text(keyword: str, text: str):
         return []
 
     sentences = nltk.tokenize.sent_tokenize(text)
-    return [sentence for sentence in sentences if keyword.lower() in nltk.tokenize.word_tokenize(sentence.lower())]
- 
+    sample_sentences = [sentence for sentence in sentences if keyword.lower() in nltk.tokenize.word_tokenize(sentence.lower())]
+    if limit:
+        sample_sentences = sample_sentences[:limit]
+    return sample_sentences
 
 def highlight_word_in_sentence(keyword: str, sentence: str):
     """
@@ -125,8 +127,9 @@ def build_filepaths_to_process(path: str):
 
 @click.command()
 @click.argument("path", type=click.Path("r"))
-@click.option('--target', default="output.md", type=str)
-def frequent_interesting_words(path, target):
+@click.option('--target', type=str, default="output.md", help="Filepath for the output table")
+@click.option('--limit-example-sentences', 'limit', type=bool, default=True, help="Limit the example sentences in table output to one per document")
+def frequent_interesting_words(path, target, limit):
     filepaths_to_process = build_filepaths_to_process(path)
    
     interesting_word_frequency_collection = []
@@ -151,7 +154,7 @@ def frequent_interesting_words(path, target):
         with open(filepath, "r") as f:
             text = f.read()
         for word in paths_to_word_map[filepath]:
-            words[word] += extract_sample_sentences_from_text(word, text)
+            words[word] += extract_sample_sentences_from_text(word, text, limit=1 if limit else None)
     
     format_output_table(result, words).dump(target)
 
