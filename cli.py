@@ -10,12 +10,12 @@ import click
 import os
 
 
-def extract_keywords(text: str):
+def extract_keywords(text: str, word_limit: int):
     """
     Get up to the top x keywords from text 
     
     """
-    kw_extractor = yake.KeywordExtractor(lan="en", n=1, dedupLim=0.9, top=50, features=None)
+    kw_extractor = yake.KeywordExtractor(lan="en", n=1, dedupLim=0.9, top=word_limit, features=None)
     keywords = kw_extractor.extract_keywords(text)
 
     return [k[0].lower() for k in sorted(keywords, key=lambda x: x[1])]
@@ -33,13 +33,13 @@ def build_word_occurance_dict(text: str, words: List[str]) :
     return filtered_words
 
 
-def build_interesting_word_frequency_dict(text: str, path: str):
+def build_interesting_word_frequency_dict(text: str, path: str, word_limit: int):
     if not path or not text:
         return {}
 
     return {
         word: { path: frequency }
-        for word, frequency in build_word_occurance_dict(text, extract_keywords(text)).items()
+        for word, frequency in build_word_occurance_dict(text, extract_keywords(text, word_limit)).items()
     }
 
 
@@ -128,14 +128,15 @@ def build_filepaths_to_process(path: str):
 @click.option('--target', type=str, default="output.md", help="Filepath for the output table")
 @click.option('--unlimit-example-sentences', 'example_limit', is_flag=True, help="Remove the one per document limit on example sentences in the table output")
 @click.option('--interesting-words-limit', 'word_count', type=int, default=10, help="An upper bound on the number of interesting words in the output table, ranked by frequency, 0 means no limit")
-def frequent_interesting_words(path, target, example_limit, word_count):
+@click.option('--interesting-words-per-document', 'per_doc_word_count', type=int, default=50, help="How many interesting words to discover per document, reducing improves performance but decreases validity")
+def frequent_interesting_words(path, target, example_limit, word_count, per_doc_word_count):
     filepaths_to_process = build_filepaths_to_process(path)
    
     interesting_word_frequency_collection = []
     for filepath in filepaths_to_process:        
         with open(filepath, "r") as f:
             text = f.read()
-        interesting_word_frequency_collection.append(build_interesting_word_frequency_dict(text, filepath))
+        interesting_word_frequency_collection.append(build_interesting_word_frequency_dict(text, filepath, word_limit=per_doc_word_count))
 
     result = aggregate_words_with_frequency(interesting_word_frequency_collection, word_count)
     processed_data = flatten_and_sort_words_with_frequency(result)
