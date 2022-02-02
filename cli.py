@@ -43,20 +43,23 @@ def build_interesting_word_frequency_dict(text: str, path: str):
     }
 
 
-def aggregate_words_with_frequency(interesting_word_frequency_collection):
+def flatten_and_sort_words_with_frequency(words_with_frequency):
+    flattened_words = [(k, sum(frequency for _, frequency in v.items() )) for k, v in words_with_frequency.items()]
+    # ordered by frequency, followed by alphabetical
+    return sorted(flattened_words, key=lambda x: (-x[1], x[0]))    
+
+
+def aggregate_words_with_frequency(interesting_word_frequency_collection, limit: int=None):
     """merge the dicts"""
     result = defaultdict(dict)
     for interesting_word_frequency_dict in interesting_word_frequency_collection:
         for word, v in interesting_word_frequency_dict.items():
             for document, frequency in v.items():
                 result[word][document] = frequency
+    
+    if limit:
+        result = { k: v for k, v in result.items() if k in [x for x, _ in flatten_and_sort_words_with_frequency(result)[:limit]] }
     return result
-
-
-def flatten_and_sort_words_with_frequency(words_with_frequency):
-    flattened_words = [(k, sum(frequency for _, frequency in v.items() )) for k, v in words_with_frequency.items()]
-    # ordered by frequency, followed by alphabetical
-    return sorted(flattened_words, key=lambda x: (-x[1], x[0]))    
 
 
 def extract_sample_sentences_from_text(keyword: str, text: str, limit: int=None):
@@ -123,8 +126,9 @@ def build_filepaths_to_process(path: str):
 @click.command()
 @click.argument("path", type=click.Path("r"))
 @click.option('--target', type=str, default="output.md", help="Filepath for the output table")
-@click.option('--limit-example-sentences', 'limit', type=bool, default=True, help="Limit the example sentences in table output to one per document")
-def frequent_interesting_words(path, target, limit):
+@click.option('--unlimit-example-sentences', 'example_limit', is_flag=True, help="Remove the one per document limit on example sentences in the table output")
+@click.option('--interesting-words-limit', 'word_count', type=int, default=10, help="An upper bound on the number of interesting words in the output table, ranked by frequency, 0 means no limit")
+def frequent_interesting_words(path, target, example_limit, word_count):
     filepaths_to_process = build_filepaths_to_process(path)
    
     interesting_word_frequency_collection = []
@@ -133,9 +137,9 @@ def frequent_interesting_words(path, target, limit):
             text = f.read()
         interesting_word_frequency_collection.append(build_interesting_word_frequency_dict(text, filepath))
 
-    result = aggregate_words_with_frequency(interesting_word_frequency_collection)
+    result = aggregate_words_with_frequency(interesting_word_frequency_collection, word_count)
     processed_data = flatten_and_sort_words_with_frequency(result)
-
+   
     click.echo([k for k, _ in processed_data])
 
     paths_to_word_map = defaultdict(list) 
@@ -144,14 +148,14 @@ def frequent_interesting_words(path, target, limit):
             paths_to_word_map[path].append(word)
 
     # second iteration to make sure one text file is kept in memory
-    words = defaultdict(list)
+    sentences = defaultdict(list)
     for filepath in filepaths_to_process:        
         with open(filepath, "r") as f:
             text = f.read()
         for word in paths_to_word_map[filepath]:
-            words[word] += extract_sample_sentences_from_text(word, text, limit=1 if limit else None)
+            sentences[word] += extract_sample_sentences_from_text(word, text, None if example_limit else 1)
     
-    format_output_table(result, words).dump(target)
+    format_output_table(result, sentences).dump(target)
 
 
 if __name__ == '__main__':
