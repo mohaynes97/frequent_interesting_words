@@ -25,7 +25,7 @@ def build_word_occurance_dict(text: str, words: List[str]) :
     """
     Build a dictionary of the frequency of words contained within a body of text
     """
-    all_words = nltk.tokenize.TweetTokenizer(text).tokenize(text)
+    all_words = nltk.tokenize.word_tokenize(text)
     stopwords = nltk.corpus.stopwords.words('english')
     lower_case_words = [k.lower() for k in words]
     filtered_words = nltk.FreqDist(w.lower() for w in all_words if w not in stopwords and w.lower() in lower_case_words)  
@@ -72,12 +72,9 @@ def extract_sample_sentences_from_text(keyword: str, text: str, limit: int=None)
         sample_sentences = sample_sentences[:limit]
     return sample_sentences
 
-def highlight_word_in_sentence(keyword: str, sentence: str):
-    """
-    Highlight the word in a sentence with markdown syntax
-    """
-    th = TextHighlighter(max_ngram_size = 1, highlight_pre = "**", highlight_post= "**")
-    return th.highlight(sentence, [keyword])
+
+def highlight_text(text: str, word: str):
+    return TextHighlighter(max_ngram_size=1, highlight_pre="**", highlight_post="**").highlight(text, [word, f"{word}'s"])    
 
 
 def format_output_table(words_with_frequency, word_to_sentences_map):
@@ -89,15 +86,13 @@ def format_output_table(words_with_frequency, word_to_sentences_map):
 
     flattened_words = flatten_and_sort_words_with_frequency(words_with_frequency)
 
-    highlighter = TextHighlighter(max_ngram_size=1, highlight_pre="**", highlight_post="**")
-
     value_matrix = []
     for word, frequency in flattened_words:
         # [:-4] is for removing the .txt from the filename
         docs = ", ".join(sorted(Path(path).name[:-4] for path in words_with_frequency[word]))
         value_matrix.append([
             f"{word} ({frequency})", docs, "<br/><br/>".join(
-                highlighter.highlight(sentence, [word]) for sentence in word_to_sentences_map[word]
+                highlight_text(sentence, word) for sentence in word_to_sentences_map[word]
             )
         ])
 

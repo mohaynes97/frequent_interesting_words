@@ -28,4 +28,4 @@ def test_extract_sentence_no_substrings():
 
 
 def test_extract_sentence_limit():
-    assert extract_sample_sentences_from_text("cat", "Cat on mat. Cat loves mat. Cat and mat.", limit=2) == ["Cat on mat.", "Cat loves mat."]
+    assert extract_sample_sentences_from_text("cat", "Cat on mat. Cat loves mat. Cat and mat.", limit=2) == ["Cat on mat.", "Cat loves mat."]        
