@@ -2,6 +2,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import List
 from pytablewriter import MarkdownTableWriter
+from yake.highlight import TextHighlighter
 
 import yake
 import nltk
@@ -69,6 +70,14 @@ def extract_sample_sentences_from_text(keyword: str, text: str):
     return [sentence for sentence in sentences if keyword.lower() in nltk.tokenize.word_tokenize(sentence.lower())]
  
 
+def highlight_word_in_sentence(keyword: str, sentence: str):
+    """
+    Highlight the word in a sentence with markdown syntax
+    """
+    th = TextHighlighter(max_ngram_size = 1, highlight_pre = "**", highlight_post= "**")
+    return th.highlight(sentence, [keyword])
+
+
 def format_output_table(words_with_frequency, word_to_sentences_map):
     """
     Create the correct table writer    
@@ -78,17 +87,22 @@ def format_output_table(words_with_frequency, word_to_sentences_map):
 
     flattened_words = flatten_and_sort_words_with_frequency(words_with_frequency)
 
-    rows = []
+    highlighter = TextHighlighter(max_ngram_size=1, highlight_pre="**", highlight_post="**")
+
+    value_matrix = []
     for word, frequency in flattened_words:
-        rows.append([
-            f"{word} ({frequency})", ", ".join(sorted(Path(path).name[:-4] for path in words_with_frequency[word])),
-            "<br/><br/>".join(word_to_sentences_map[word])
+        # [:-4] is for removing the .txt from the filename
+        docs = ", ".join(sorted(Path(path).name[:-4] for path in words_with_frequency[word]))
+        value_matrix.append([
+            f"{word} ({frequency})", docs, "<br/><br/>".join(
+                highlighter.highlight(sentence, [word]) for sentence in word_to_sentences_map[word]
+            )
         ])
 
     writer = MarkdownTableWriter(
         table_name="Interesting Words Summary",
         headers=["Word (Total Occurances)", "Documents", "Sentences Containing The Word"],
-        value_matrix=rows
+        value_matrix=value_matrix
     )
 
     return writer

@@ -4,19 +4,6 @@ import os
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-
-#def test_no_filepath():
-#    assert aggregate_words_with_frequency([]) == {}
-
-
-#def test_bad_filepath():
-#    with pytest.raises(FileNotFoundError):
-#        aggregate_words_with_frequency(["/this/cannot/exist/de(ar/heavens/let/this/not/exist"])
-
-
-#def test_empty_file():
-#    assert aggregate_words_with_frequency([f"{ROOT_DIR}/fixtures/empty.txt"]) == {}
-
 @pytest.fixture
 def cats_and_mats_data():
     return {
