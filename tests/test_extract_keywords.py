@@ -1,4 +1,5 @@
 import pytest
+
 from cli import extract_keywords
 
 

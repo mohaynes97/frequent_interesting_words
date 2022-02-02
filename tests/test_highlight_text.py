@@ -1,4 +1,5 @@
 import pytest
+
 from cli import highlight_text
 
 

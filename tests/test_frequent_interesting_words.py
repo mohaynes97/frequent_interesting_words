@@ -1,6 +1,8 @@
-from click.testing import CliRunner
-from cli import frequent_interesting_words
 import os
+
+from click.testing import CliRunner
+
+from cli import frequent_interesting_words
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 

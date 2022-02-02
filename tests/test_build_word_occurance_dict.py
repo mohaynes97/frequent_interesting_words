@@ -1,4 +1,5 @@
 import pytest
+
 from cli import build_word_occurance_dict
 
 

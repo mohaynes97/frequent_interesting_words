@@ -1,13 +1,13 @@
+import os
 from collections import defaultdict
 from pathlib import Path
 from typing import List
+
+import click
+import nltk
+import yake
 from pytablewriter import MarkdownTableWriter
 from yake.highlight import TextHighlighter
-
-import yake
-import nltk
-import click
-import os
 
 
 def extract_keywords(text: str, word_limit: int):

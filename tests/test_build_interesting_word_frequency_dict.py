@@ -1,4 +1,5 @@
 import pytest
+
 from cli import build_interesting_word_frequency_dict
 
 

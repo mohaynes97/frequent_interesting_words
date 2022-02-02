@@ -1,4 +1,5 @@
 import pytest
+
 from cli import extract_sample_sentences_from_text
 
 
