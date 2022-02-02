@@ -8,7 +8,9 @@ def test_missing_parameters():
 
 
 def test_text():
-    data = build_interesting_word_frequency_dict("cat sat on mat with another cat", "/test/cats_and_mats.txt", 10)
+    data = build_interesting_word_frequency_dict(
+        "cat sat on mat with another cat", "/test/cats_and_mats.txt", 10
+    )
 
     assert list(data.keys()) == ["cat", "sat", "mat"]
     for word, v in data.items():

@@ -12,4 +12,7 @@ def test_highlight_word():
 
 
 def test_highlight_apostraphe():
-    assert highlight_text("cat's on mat with cat.", "cat") == "**cat's** on mat with **cat**."
+    assert (
+        highlight_text("cat's on mat with cat.", "cat")
+        == "**cat's** on mat with **cat**."
+    )
