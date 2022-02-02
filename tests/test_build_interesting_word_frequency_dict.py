@@ -1,6 +1,6 @@
 import pytest
 
-from cli import build_interesting_word_frequency_dict
+from frequent_interesting_words.cli import build_interesting_word_frequency_dict
 
 
 def test_missing_parameters():

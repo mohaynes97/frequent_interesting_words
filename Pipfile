@@ -10,6 +10,7 @@ pytest-mock = "*"
 nltk = "*"
 click = "*"
 pytablewriter = "*"
+pytest-cov = "*"
 
 [dev-packages]
 black = "*"

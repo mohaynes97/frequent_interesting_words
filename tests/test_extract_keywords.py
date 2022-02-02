@@ -1,6 +1,6 @@
 import pytest
 
-from cli import extract_keywords
+from frequent_interesting_words.cli import extract_keywords
 
 
 @pytest.fixture

@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from cli import format_output_table
+from frequent_interesting_words.cli import format_output_table
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 

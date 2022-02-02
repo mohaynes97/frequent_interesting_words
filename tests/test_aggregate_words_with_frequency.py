@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from cli import aggregate_words_with_frequency
+from frequent_interesting_words.cli import aggregate_words_with_frequency
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 

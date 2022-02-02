@@ -214,7 +214,7 @@ def frequent_interesting_words(
         for path, _ in v.items():
             paths_to_word_map[path].append(word)
 
-    # second iteration to make sure one text file is kept in memory
+    # Second iteration to make sure one text file is kept in memory
     sentences = defaultdict(list)
     for filepath in filepaths_to_process:
         with open(filepath, "r") as f:

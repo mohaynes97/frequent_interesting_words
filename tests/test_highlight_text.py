@@ -1,6 +1,6 @@
 import pytest
 
-from cli import highlight_text
+from frequent_interesting_words.cli import highlight_text
 
 
 def test_highlight_no_input():

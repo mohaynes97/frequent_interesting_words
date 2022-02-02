@@ -1,6 +1,6 @@
 import pytest
 
-from cli import build_word_occurance_dict
+from frequent_interesting_words.cli import build_word_occurance_dict
 
 
 def test_empty_parameters():

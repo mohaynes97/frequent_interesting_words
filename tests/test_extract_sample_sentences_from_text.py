@@ -1,6 +1,6 @@
 import pytest
 
-from cli import extract_sample_sentences_from_text
+from frequent_interesting_words.cli import extract_sample_sentences_from_text
 
 
 def test_extract_sentence_empty_parameters():
