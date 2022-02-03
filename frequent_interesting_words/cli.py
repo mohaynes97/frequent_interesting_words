@@ -1,4 +1,5 @@
 import os
+import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Iterable, Type, TypedDict
@@ -8,8 +9,6 @@ import nltk
 import yake
 from pytablewriter import MarkdownTableWriter
 from yake.highlight import TextHighlighter
-
-import re
 
 
 class WordsWithFrequencyDict(TypedDict):

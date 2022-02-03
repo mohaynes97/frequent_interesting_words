@@ -13,7 +13,9 @@ def test_highlight_word():
 
 
 def test_highlight_word_mixed_case():
-    assert highlight_text("Cat on mat with cat.", "cat") == "**Cat** on mat with **cat**."
+    assert (
+        highlight_text("Cat on mat with cat.", "cat") == "**Cat** on mat with **cat**."
+    )
 
 
 def test_highlight_apostraphe_esque_special_cases():
