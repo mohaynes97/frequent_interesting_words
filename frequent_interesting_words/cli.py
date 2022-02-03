@@ -9,6 +9,8 @@ import yake
 from pytablewriter import MarkdownTableWriter
 from yake.highlight import TextHighlighter
 
+import re
+
 
 class WordsWithFrequencyDict(TypedDict):
     word: str
@@ -161,7 +163,7 @@ def highlight_text(text: str, word: str) -> str:
     """Highlight the given word within the text using md bold syntax"""
     return TextHighlighter(
         max_ngram_size=1, highlight_pre="**", highlight_post="**"
-    ).highlight(text, [word, f"{word}'s"])
+    ).highlight(text, [word, f"{word}’s", f"{word}'s", f"{word}`s"])
 
 
 def format_output_table(
