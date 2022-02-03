@@ -225,7 +225,3 @@ def frequent_interesting_words(
             )
 
     format_output_table(result, sentences).dump(target)
-
-
-if __name__ == "__main__":
-    frequent_interesting_words()

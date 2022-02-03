@@ -11,6 +11,7 @@ nltk = "*"
 click = "*"
 pytablewriter = "*"
 pytest-cov = "*"
+frequent-interesting-words = {editable = true, path = "."}
 
 [dev-packages]
 black = "*"
@@ -18,3 +19,6 @@ isort = "*"
 
 [requires]
 python_version = "3.9"
+
+[scripts]
+frequent_interesting_words = "python frequent_interesting_words/cli.py"
