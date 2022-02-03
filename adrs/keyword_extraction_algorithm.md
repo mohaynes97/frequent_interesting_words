@@ -19,7 +19,7 @@ The libraries themsleves are not explored in detail, each has recent changes, a 
 
 Performance is also not thoroughly investigated as there are no SLA's associated with the exercise, however it can be taken as a secondary criteria.
 
-The scripts for carrying out the tests are archived as ****, if any further clarification is needed
+The scripts for carrying out the tests are archived as kwyword_extraction_algorithm.tar.gz if any further clarification is needed
 
 ## Results
 
