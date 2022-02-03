@@ -8,6 +8,7 @@ A python CLI script for extracting the most frequent interesting words from a se
 
 ```bash
 pipenv install
+pipenv run setup_nltk
 ```
 
 ## Usage

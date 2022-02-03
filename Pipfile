@@ -19,3 +19,6 @@ pytest-cov = "*"
 
 [requires]
 python_version = "3.9"
+
+[scripts]
+setup_nltk = "python -c \"import nltk ; nltk.download('punkt') ; nltk.download('stopwords')\""
