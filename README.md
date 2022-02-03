@@ -16,9 +16,9 @@ pipenv install
 # Arguments 
 pipenv run frequent-interesting-words --help  
 # Run on a single file
-pipenv run frequent-interesting-words /test_docs/doc1.txt
+pipenv run frequent-interesting-words /sample_docs/doc1.txt
 # Run on a directory
-pipenv run frequent-interesting-words /test_docs/
+pipenv run frequent-interesting-words /sample_docs/
 ```
 By default saves the table as **output.md** in the current directory
 
