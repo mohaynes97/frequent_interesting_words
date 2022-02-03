@@ -12,7 +12,7 @@ from yake.highlight import TextHighlighter
 
 class WordsWithFrequencyDict(TypedDict):
     word: str
-    doc_name_to_frequency_map: dict[str, int]
+    doc_path_to_frequency_map: dict[str, int]
 
 
 def extract_keywords(text: str, word_limit: int) -> list[str]:
@@ -189,10 +189,8 @@ def format_output_table(
 
     value_matrix = []
     for word, frequency in flattened_words:
-        # [:-4] is for removing the .txt from the filename
-        docs = ", ".join(
-            sorted(Path(path).name[:-4] for path in words_with_frequency[word])
-        )
+        # split('.')[0] is for removing the .txt from the filename
+        docs = ", ".join(sorted(Path(path).stem for path in words_with_frequency[word]))
         value_matrix.append(
             [
                 f"{word} ({frequency})",
@@ -219,8 +217,7 @@ def format_output_table(
 
 def build_filepaths_to_process(path: str) -> list[str]:
     """
-    If path is a file then return that, if its a directory then add all the files inside,
-    validate they are txt files
+    If path is a file then return that, if its a directory then add all the files inside
 
     Args:
         path: filepath, can be a file or directory
@@ -286,9 +283,8 @@ def frequent_interesting_words(
     result = aggregate_words_with_frequency(
         interesting_word_frequency_collection, word_count
     )
-    processed_data = flatten_and_sort_words_with_frequency(result)
 
-    click.echo([k for k, _ in processed_data])
+    click.echo([k for k, _ in flatten_and_sort_words_with_frequency(result)])
 
     paths_to_word_map = defaultdict(list)
     for word, v in result.items():
