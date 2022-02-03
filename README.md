@@ -26,7 +26,7 @@ By default saves the table as **output.md** in the current directory
 ## Testing
 ```bash
 pipenv install --dev
-pytest
+pipenv run pytest
 ```
 
 ## ADR's
