@@ -22,5 +22,14 @@ pipenv run frequent-interesting-words /sample_docs/
 ```
 By default saves the table as **output.md** in the current directory
 
+## Testing
+```bash
+pipenv install --dev
+pytest
+```
+
+## ADR's
+Architectural decision records live in /adrs/
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

@@ -5,20 +5,17 @@ name = "pypi"
 
 [packages]
 yake = "*"
-pytest = "*"
-pytest-mock = "*"
 nltk = "*"
 click = "*"
 pytablewriter = "*"
-pytest-cov = "*"
 frequent-interesting-words = {editable = true, path = "."}
 
 [dev-packages]
 black = "*"
 isort = "*"
+pytest = "*"
+pytest-mock = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.9"
-
-[scripts]
-frequent_interesting_words = "python frequent_interesting_words/cli.py"
